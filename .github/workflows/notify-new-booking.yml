@@ -1,0 +1,38 @@
+name: Notify Nueva Reserva via Telegram
+on:
+  push:
+    paths:
+      - 'new-booking.json'
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send Telegram if new bookings
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, urllib.request, os
+          with open('new-booking.json') as f:
+              d = json.load(f)
+          bookings = d.get('bookings', [])
+          if not bookings:
+              print("No new bookings, skipping Telegram.")
+              exit(0)
+          tok = os.environ['TELEGRAM_BOT_TOKEN']
+          cid = os.environ['TELEGRAM_CHAT_ID']
+          for b in bookings:
+              nombre = b.get('nombre', '?')
+              fecha = b.get('fecha', '?')
+              hora = b.get('hora', '?')
+              servicio = b.get('servicio', 'Sesion')
+              telefono = b.get('telefono', '-')
+              msg = f"Nueva reserva: {nombre} | {servicio} | {fecha} a las {hora} | Tel: {telefono}"
+              data = json.dumps({"chat_id": cid, "text": msg}).encode()
+              req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
+                  data=data, headers={"Content-Type": "application/json"})
+              urllib.request.urlopen(req, timeout=15)
+              print(f"Telegram OK: {nombre}")
+          PYEOF
