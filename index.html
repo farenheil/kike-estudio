@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM Estudio — @kikegutz</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #6b7280;
+    --color-text-info: #185FA5;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f9fafb;
+    --color-border-tertiary: #e5e7eb;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--color-background-secondary); color: var(--color-text-primary); padding: 16px; max-width: 900px; margin: 0 auto; }
+  button { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); cursor: pointer; color: var(--color-text-primary); font-family: inherit; }
+  button:hover { background: #f3f4f6; }
+  .day-cell { min-height: 80px; border: 0.5px solid var(--color-border-tertiary); padding: 6px; cursor: default; }
+  .day-cell.has-events { cursor: pointer; }
+  .day-cell:hover.has-events { background: var(--color-background-secondary); }
+  .chip { font-size: 11px; font-weight: 500; padding: 2px 6px; border-radius: 4px; margin-bottom: 3px; cursor: pointer; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chip:hover { opacity: .85; }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+  .loading { text-align: center; padding: 2rem; color: var(--color-text-secondary); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div id="view-menu" style="display:none;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0 1.25rem;">
+    <div>
+      <p style="font-size:18px;font-weight:500;color:var(--color-text-primary);margin:0;">Pipeline de citas</p>
+      <p style="font-size:13px;color:var(--color-text-secondary);margin:4px 0 0;">@kikegutz · Google Calendar</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#1D9E75;"></div>
+      <span style="font-size:12px;color:var(--color-text-secondary);" id="updated-label">Cargando...</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:1.5rem;">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;">
+      <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 6px;">Próximas citas</p>
+      <p style="font-size:24px;font-weight:500;color:var(--color-text-primary);margin:0;" id="stat-citas">—</p>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;">
+      <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 6px;">Este mes</p>
+      <p style="font-size:24px;font-weight:500;color:var(--color-text-primary);margin:0;" id="stat-mes">—</p>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;">
+      <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 6px;">Sin confirmar</p>
+      <p style="font-size:24px;font-weight:500;color:var(--color-text-primary);margin:0;" id="stat-sin">—</p>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;cursor:pointer;" onclick="showCalendario()">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:36px;height:36px;border-radius:var(--border-radius-md);background:#EEEDFE;display:flex;align-items:center;justify-content:center;">
+          <i class="ti ti-calendar-month" style="font-size:18px;color:#534AB7;"></i>
+        </div>
+        <div>
+          <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">Ver calendario</p>
+          <p style="font-size:12px;color:var(--color-text-secondary);margin:0;">Sesiones del mes</p>
+        </div>
+      </div>
+      <button style="width:100%;font-size:13px;padding:8px;">Abrir →</button>
+    </div>
+
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:36px;height:36px;border-radius:var(--border-radius-md);background:#E6F1FB;display:flex;align-items:center;justify-content:center;">
+          <i class="ti ti-list-check" style="font-size:18px;color:#185FA5;"></i>
+        </div>
+        <div>
+          <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">Sesiones de hoy</p>
+          <p style="font-size:12px;color:var(--color-text-secondary);margin:0;" id="hoy-label">—</p>
+        </div>
+      </div>
+      <div id="hoy-lista" style="font-size:13px;color:var(--color-text-secondary);">—</div>
+    </div>
+
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:36px;height:36px;border-radius:var(--border-radius-md);background:#E1F5EE;display:flex;align-items:center;justify-content:center;">
+          <i class="ti ti-clock" style="font-size:18px;color:#085041;"></i>
+        </div>
+        <div>
+          <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">Próxima sesión</p>
+          <p style="font-size:12px;color:var(--color-text-secondary);margin:0;" id="proxima-label">—</p>
+        </div>
+      </div>
+      <div id="proxima-detalle" style="font-size:13px;color:var(--color-text-secondary);">—</div>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:var(--color-text-secondary);text-align:right;margin-top:12px;" id="footer-updated"></p>
+</div>
+
+<div id="view-loading" class="loading">
+  <i class="ti ti-loader" style="font-size:24px;"></i><br>Cargando sesiones...
+</div>
+
+<div id="view-calendario" style="display:none;">
+  <div style="display:flex;align-items:center;gap:10px;padding:1.5rem 0 1rem;">
+    <button onclick="showMenu()" style="padding:6px 10px;font-size:13px;"><i class="ti ti-arrow-left"></i></button>
+    <div style="flex:1;">
+      <p style="font-size:16px;font-weight:500;color:var(--color-text-primary);margin:0;">Calendario de sesiones</p>
+    </div>
+    <button onclick="prevMonth()" style="padding:6px 10px;font-size:13px;"><i class="ti ti-chevron-left"></i></button>
+    <p style="font-size:14px;font-weight:500;min-width:120px;text-align:center;margin:0;" id="month-label"></p>
+    <button onclick="nextMonth()" style="padding:6px 10px;font-size:13px;"><i class="ti ti-chevron-right"></i></button>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;">
+    <span class="badge" style="background:#E6F1FB;color:#0C447C;">Confirmada</span>
+    <span class="badge" style="background:#FAEEDA;color:#633806;">Pendiente</span>
+    <span class="badge" style="background:#EEEDFE;color:#3C3489;">Recordatorio enviado</span>
+    <span class="badge" style="background:#FCEBEB;color:#791F1F;">Cancelada</span>
+    <span class="badge" style="background:#EAF3DE;color:#27500A;">Completada</span>
+    <span class="badge" style="background:#E1F5EE;color:#085041;">Seguimiento enviado</span>
+  </div>
+
+  <div id="cal-main">
+    <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));">
+      <div style="text-align:center;font-size:12px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Lun</div>
+      <div style="text-align:center;font-size:12px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Mar</div>
+      <div style="text-align:center;font-size:12px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Mié</div>
+      <div style="text-align:center;font-size:12px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Jue</div>
+      <div style="text-align:center;font-size:12px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Vie</div>
+      <div style="text-align:center;font-size:12px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Sáb</div>
+      <div style="text-align:center;font-size:12px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);">Dom</div>
+    </div>
+    <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-left:0.5px solid var(--color-border-tertiary);border-top:0.5px solid var(--color-border-tertiary);"></div>
+  </div>
+
+  <div id="modal-wrap" style="display:none;margin-top:1rem;">
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;max-width:360px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <p style="font-size:15px;font-weight:500;margin:0;" id="modal-date"></p>
+        <button onclick="closeModal()" style="padding:4px 8px;font-size:13px;"><i class="ti ti-x"></i></button>
+      </div>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STATUS = {
+  confirmada:   {label:'Confirmada',           bg:'#E6F1FB', color:'#0C447C'},
+  pendiente:    {label:'Pendiente',             bg:'#FAEEDA', color:'#633806'},
+  recordatorio: {label:'Recordatorio enviado', bg:'#EEEDFE', color:'#3C3489'},
+  cancelada:    {label:'Cancelada',             bg:'#FCEBEB', color:'#791F1F'},
+  completada:   {label:'Completada',            bg:'#EAF3DE', color:'#27500A'},
+  seguimiento:  {label:'Seguimiento enviado',  bg:'#E1F5EE', color:'#085041'}
+};
+
+let EVENTS = [];
+const now = new Date();
+let viewYear = now.getFullYear();
+let viewMonth = now.getMonth();
+
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function eventsForDay(y,m,d){return EVENTS.filter(e=>sameDay(e.date,new Date(y,m,d)))}
+
+fetch('data.json?t=' + Date.now())
+  .then(r => r.json())
+  .then(data => {
+    EVENTS = data.events.map(e => ({
+      ...e,
+      date: new Date(e.date + 'T12:00:00')
+    }));
+
+    // Stats
+    const today = new Date();
+    const proximas = EVENTS.filter(e => e.date >= today && e.status !== 'cancelada' && e.status !== 'completada');
+    const mesMes = EVENTS.filter(e => e.date.getMonth() === today.getMonth() && e.date.getFullYear() === today.getFullYear());
+    const sinConfirmar = EVENTS.filter(e => e.status === 'pendiente' && e.date >= today);
+
+    document.getElementById('stat-citas').textContent = proximas.length;
+    document.getElementById('stat-mes').textContent = mesMes.length;
+    document.getElementById('stat-sin').textContent = sinConfirmar.length;
+
+    // Sesiones de hoy
+    const hoy = EVENTS.filter(e => sameDay(e.date, today));
+    if (hoy.length > 0) {
+      document.getElementById('hoy-label').textContent = hoy.length + ' sesión' + (hoy.length > 1 ? 'es' : '');
+      document.getElementById('hoy-lista').innerHTML = hoy.map(e =>
+        `<div style="padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);">
+          <span style="font-weight:500;color:var(--color-text-primary);">${e.time} · ${e.nombre} ${e.apellido}</span><br>
+          <span style="color:var(--color-text-secondary);">${e.servicio}</span>
+        </div>`
+      ).join('');
+    } else {
+      document.getElementById('hoy-label').textContent = 'Sin sesiones hoy';
+      document.getElementById('hoy-lista').textContent = '—';
+    }
+
+    // Próxima sesión
+    if (proximas.length > 0) {
+      const p = proximas[0];
+      const dias = Math.round((p.date - today) / (1000 * 60 * 60 * 24));
+      document.getElementById('proxima-label').textContent = dias === 0 ? 'Hoy' : dias === 1 ? 'Mañana' : 'En ' + dias + ' días';
+      document.getElementById('proxima-detalle').innerHTML =
+        `<span style="font-weight:500;color:var(--color-text-primary);">${p.nombre} ${p.apellido}</span><br>
+         ${p.time} · ${p.servicio}<br>
+         <span style="color:var(--color-text-secondary);">${p.phone || p.email}</span>`;
+    }
+
+    // Updated label
+    const upd = new Date(data.updated);
+    document.getElementById('updated-label').textContent = 'Actualizado ' + upd.toLocaleDateString('es-ES', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    document.getElementById('footer-updated').textContent = 'Datos sincronizados desde Google Calendar · ' + upd.toLocaleString('es-ES');
+
+    document.getElementById('view-loading').style.display = 'none';
+    document.getElementById('view-menu').style.display = 'block';
+    renderCalendar();
+  })
+  .catch(() => {
+    document.getElementById('view-loading').innerHTML = '<i class="ti ti-alert-circle" style="font-size:24px;color:#dc2626;"></i><br>Error cargando datos. Recarga la página.';
+  });
+
+function showMenu(){
+  document.getElementById('view-menu').style.display='block';
+  document.getElementById('view-calendario').style.display='none';
+}
+function showCalendario(){
+  document.getElementById('view-menu').style.display='none';
+  document.getElementById('view-calendario').style.display='block';
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const label=new Date(viewYear,viewMonth,1).toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+  document.getElementById('month-label').textContent=label.charAt(0).toUpperCase()+label.slice(1);
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+  let startDow=new Date(viewYear,viewMonth,1).getDay();
+  startDow=startDow===0?6:startDow-1;
+  const daysInMonth=new Date(viewYear,viewMonth+1,0).getDate();
+  const totalCells=Math.ceil((startDow+daysInMonth)/7)*7;
+  const todayD=new Date();
+  for(let i=0;i<totalCells;i++){
+    const dayNum=i-startDow+1;
+    const cell=document.createElement('div');
+    cell.className='day-cell';
+    cell.style.borderRight='0.5px solid var(--color-border-tertiary)';
+    cell.style.borderBottom='0.5px solid var(--color-border-tertiary)';
+    if(dayNum<1||dayNum>daysInMonth){cell.style.background='var(--color-background-secondary)';grid.appendChild(cell);continue}
+    const isToday=sameDay(new Date(viewYear,viewMonth,dayNum),todayD);
+    const dl=document.createElement('p');
+    dl.style.cssText='font-size:12px;font-weight:'+(isToday?'600':'400')+';color:'+(isToday?'var(--color-text-info)':'var(--color-text-secondary)')+';margin:0 0 4px;';
+    dl.textContent=dayNum;
+    cell.appendChild(dl);
+    const events=eventsForDay(viewYear,viewMonth,dayNum);
+    if(events.length>0){
+      cell.classList.add('has-events');
+      events.slice(0,2).forEach(ev=>{
+        const s=STATUS[ev.status]||STATUS.pendiente;
+        const chip=document.createElement('span');
+        chip.className='chip';
+        chip.style.background=s.bg;
+        chip.style.color=s.color;
+        chip.textContent=ev.time+' '+ev.nombre;
+        chip.onclick=(e)=>{e.stopPropagation();openModal(viewYear,viewMonth,dayNum,[ev])};
+        cell.appendChild(chip);
+      });
+      if(events.length>2){const more=document.createElement('span');more.style.cssText='font-size:11px;color:var(--color-text-secondary);';more.textContent='+'+(events.length-2)+' más';cell.appendChild(more);}
+      cell.onclick=()=>openModal(viewYear,viewMonth,dayNum,eventsForDay(viewYear,viewMonth,dayNum));
+    }
+    grid.appendChild(cell);
+  }
+}
+
+function openModal(y,m,d,events){
+  const dateStr=new Date(y,m,d).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('modal-date').textContent=dateStr.charAt(0).toUpperCase()+dateStr.slice(1);
+  const content=document.getElementById('modal-content');
+  content.innerHTML='';
+  events.forEach(ev=>content.appendChild(buildEventCard(ev)));
+  document.getElementById('modal-wrap').style.display='block';
+  document.getElementById('cal-main').style.display='none';
+}
+
+function buildEventCard(ev){
+  const s=STATUS[ev.status]||STATUS.pendiente;
+  const initials=(ev.nombre[0]+(ev.apellido[0]||'')).toUpperCase();
+  const wrap=document.createElement('div');
+  wrap.style.cssText='border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:10px;';
+  wrap.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="width:40px;height:40px;border-radius:50%;background:${s.bg};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:${s.color};flex-shrink:0;">${initials}</div>
+      <div style="flex:1;min-width:0;">
+        <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">${ev.nombre} ${ev.apellido}</p>
+        <span class="badge" style="background:${s.bg};color:${s.color};margin-top:3px;">${s.label}</span>
+      </div>
+      <p style="font-size:13px;color:var(--color-text-secondary);margin:0;flex-shrink:0;">${ev.time}</p>
+    </div>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;">
+      <tr><td style="color:var(--color-text-secondary);padding:4px 0;width:26px;"><i class="ti ti-device-mobile" style="font-size:15px;vertical-align:-2px;"></i></td><td style="padding:4px 0;">${ev.phone||'—'}</td></tr>
+      <tr><td style="color:var(--color-text-secondary);padding:4px 0;"><i class="ti ti-mail" style="font-size:15px;vertical-align:-2px;"></i></td><td style="padding:4px 0;">${ev.email||'—'}</td></tr>
+      <tr><td style="color:var(--color-text-secondary);padding:4px 0;"><i class="ti ti-microphone" style="font-size:15px;vertical-align:-2px;"></i></td><td style="padding:4px 0;">${ev.servicio||'—'}</td></tr>
+      <tr><td style="color:var(--color-text-secondary);padding:4px 0;"><i class="ti ti-music" style="font-size:15px;vertical-align:-2px;"></i></td><td style="padding:4px 0;">${ev.genero||'—'}</td></tr>
+      <tr><td style="color:var(--color-text-secondary);padding:4px 0;vertical-align:top;padding-top:6px;"><i class="ti ti-bookmark" style="font-size:15px;vertical-align:-2px;"></i></td><td style="padding:4px 0;color:var(--color-text-secondary);line-height:1.5;">${ev.referencias||'—'}</td></tr>
+    </table>`;
+  return wrap;
+}
+
+function closeModal(){
+  document.getElementById('modal-wrap').style.display='none';
+  document.getElementById('cal-main').style.display='block';
+}
+function prevMonth(){viewMonth--;if(viewMonth<0){viewMonth=11;viewYear--;}renderCalendar();}
+function nextMonth(){viewMonth++;if(viewMonth>11){viewMonth=0;viewYear++;}renderCalendar();}
+</script>
+</body>
+</html>

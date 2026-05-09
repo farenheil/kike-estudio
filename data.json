@@ -1,0 +1,57 @@
+{
+  "updated": "2026-05-09T09:30:00",
+  "stats": {
+    "citasProximas": 3,
+    "sinConfirmar": 0
+  },
+  "events": [
+    {
+      "date": "2026-05-08",
+      "nombre": "Sesión",
+      "apellido": "Rojo",
+      "phone": "",
+      "email": "by.kikegutz@gmail.com",
+      "genero": "—",
+      "referencias": "—",
+      "servicio": "Sesión propia",
+      "time": "18:00",
+      "status": "completada"
+    },
+    {
+      "date": "2026-05-10",
+      "nombre": "Eddrick",
+      "apellido": "Cedeño",
+      "phone": "670 465 574",
+      "email": "eddrickjc@gmail.com",
+      "genero": "—",
+      "referencias": "—",
+      "servicio": "Grabación / Beat",
+      "time": "11:00",
+      "status": "confirmada"
+    },
+    {
+      "date": "2026-05-11",
+      "nombre": "Kike",
+      "apellido": "Gutz",
+      "phone": "645 732 661",
+      "email": "kikegutz1@gmail.com",
+      "genero": "Boombap",
+      "referencias": "Canserbero",
+      "servicio": "Grabación",
+      "time": "18:00",
+      "status": "confirmada"
+    },
+    {
+      "date": "2026-05-13",
+      "nombre": "Lachy",
+      "apellido": "Rayd",
+      "phone": "640 520 765",
+      "email": "lazarojoelgarciaferndez@gmail.com",
+      "genero": "Boombap / Rap",
+      "referencias": "Los Aldeanos",
+      "servicio": "Rap",
+      "time": "18:00",
+      "status": "confirmada"
+    }
+  ]
+}
