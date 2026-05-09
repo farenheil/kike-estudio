@@ -1,29 +1,32 @@
 {
-  "updated": "2026-05-09T11:02:36.120992",
+  "updated": "2026-05-09T11:42:23.556647",
   "resumen": {
     "urgente": 0,
     "esta_semana": 0,
     "en_progreso": 2,
-    "por_cobrar": 2
+    "por_cobrar": 3
   },
   "proyectos": [
     {
-      "cliente": "Eddri & Rojo",
-      "servicio": "Pack completo, Diseño de portada",
-      "status": "en_progreso",
-      "deadline": null,
-      "importe": 50,
-      "pagado": true
-    },
-    {
+      "nombre": "Grammy",
       "cliente": "Rojo",
-      "servicio": "Pack completo, Diseño de portada",
+      "servicio": "Pack completo + Diseño de portada",
       "status": "en_progreso",
       "deadline": null,
       "importe": 100,
       "pagado": false
     },
     {
+      "nombre": "Me hubiera quedado",
+      "cliente": "Eddri & Rojo",
+      "servicio": "Pack completo + Diseño de portada",
+      "status": "en_progreso",
+      "deadline": null,
+      "importe": 50,
+      "pagado": true
+    },
+    {
+      "nombre": "Folk-Hip hop",
       "cliente": "Ivonne",
       "servicio": "Pack completo",
       "status": "por_cobrar",
@@ -32,11 +35,21 @@
       "pagado": false
     },
     {
-      "cliente": "Gabi",
-      "servicio": "Mezcla, Master, Grabación",
+      "nombre": "Pensándote",
+      "cliente": "Eddri",
+      "servicio": "Mezcla + Master + Diseño de portada",
       "status": "por_cobrar",
       "deadline": null,
-      "importe": 90,
+      "importe": 0,
+      "pagado": false
+    },
+    {
+      "nombre": "Conexión",
+      "cliente": "Eddri & Ivonne",
+      "servicio": "Pack completo",
+      "status": "por_cobrar",
+      "deadline": null,
+      "importe": 0,
       "pagado": false
     }
   ]
