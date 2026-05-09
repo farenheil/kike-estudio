@@ -56,7 +56,7 @@
     <div style="display:flex;align-items:center;gap:8px;">
       <div id="status-dot" style="width:8px;height:8px;border-radius:50%;background:#1D9E75;"></div>
       <span style="font-size:12px;color:var(--color-text-secondary);" id="updated-label">Cargando...</span>
-      <button id="refresh-btn" onclick="refreshAll()" style="padding:4px 8px;font-size:13px;" title="Actualizar datos"><i id="refresh-icon" class="ti ti-refresh"></i></button>
+      <span style="font-size:12px;color:var(--color-text-secondary);" id="next-update-label"></span>
     </div>
   </div>
 
@@ -601,6 +601,13 @@ function renderInforme(){
       '</div>' : '');
 }
 
+function updateNextLabel(){
+  const now = new Date();
+  const h = now.getHours() * 60 + now.getMinutes();
+  const next = h < 7*60 ? '07:00h' : h < 20*60 ? '20:00h' : '07:00h mañana';
+  document.getElementById('next-update-label').textContent = '· Próx: ' + next;
+}
+
 function refreshAll(){
   const btn = document.getElementById('refresh-btn');
   const icon = document.getElementById('refresh-icon');
@@ -651,6 +658,7 @@ function refreshAll(){
       const upd = new Date(data.updated);
       document.getElementById('updated-label').textContent = 'Actualizado ' + upd.toLocaleDateString('es-ES', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
       document.getElementById('footer-updated').textContent = 'Datos sincronizados desde Google Calendar · ' + upd.toLocaleString('es-ES');
+      updateNextLabel();
       renderCalendar();
       done();
     }).catch(() => done());
