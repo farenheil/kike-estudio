@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-09T12:03:42.405031",
+  "updated": "2026-05-09T12:15:20.003410",
   "resumen": {
     "urgente": 0,
     "esta_semana": 0,
@@ -10,7 +10,7 @@
     {
       "nombre": "Grammy",
       "cliente": "Rojo",
-      "servicio": "Pack completo + Diseño de portada",
+      "servicio": "Pack completo, Diseño de portada",
       "status": "en_progreso",
       "deadline": null,
       "importe": 0,
@@ -19,7 +19,7 @@
     {
       "nombre": "Me hubiera quedado",
       "cliente": "Eddri & Rojo",
-      "servicio": "Pack completo + Diseño de portada",
+      "servicio": "Pack completo, Diseño de portada",
       "status": "en_progreso",
       "deadline": null,
       "importe": 0,
