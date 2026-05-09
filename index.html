@@ -37,6 +37,8 @@
   .chip:hover { opacity: .85; }
   .badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 4px; display: inline-block; }
   .loading { text-align: center; padding: 2rem; color: var(--color-text-secondary); font-size: 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinning { animation: spin 0.8s linear infinite; display: inline-block; }
 </style>
 </head>
 <body>
@@ -52,8 +54,9 @@
       <p style="font-size:13px;color:var(--color-text-secondary);margin:4px 0 0;">@kikegutz · Google Calendar</p>
     </div>
     <div style="display:flex;align-items:center;gap:8px;">
-      <div style="width:8px;height:8px;border-radius:50%;background:#1D9E75;"></div>
+      <div id="status-dot" style="width:8px;height:8px;border-radius:50%;background:#1D9E75;"></div>
       <span style="font-size:12px;color:var(--color-text-secondary);" id="updated-label">Cargando...</span>
+      <button id="refresh-btn" onclick="refreshAll()" style="padding:4px 8px;font-size:13px;" title="Actualizar datos"><i id="refresh-icon" class="ti ti-refresh"></i></button>
     </div>
   </div>
 
@@ -555,6 +558,76 @@ function renderInforme(){
         '<p style="font-size:12px;font-weight:500;color:#713F12;text-transform:uppercase;letter-spacing:.5px;margin:0 0 8px;">Recomendacion</p>'+
         '<p style="font-size:14px;color:#1a1a1a;line-height:1.6;margin:0;">'+d.recomendacion+'</p>'+
       '</div>' : '');
+}
+
+function refreshAll(){
+  const btn = document.getElementById('refresh-btn');
+  const icon = document.getElementById('refresh-icon');
+  const dot = document.getElementById('status-dot');
+  icon.classList.add('spinning');
+  btn.disabled = true;
+  dot.style.background = '#f59e0b';
+  let pending = 4;
+  let mainOk = false;
+  function done(){
+    pending--;
+    if(pending === 0){
+      icon.classList.remove('spinning');
+      btn.disabled = false;
+      dot.style.background = mainOk ? '#1D9E75' : '#dc2626';
+    }
+  }
+  const t = Date.now();
+  fetch('data.json?t=' + t)
+    .then(r => r.json())
+    .then(data => {
+      mainOk = true;
+      EVENTS = data.events.map(e => ({...e, date: new Date(e.date + 'T12:00:00')}));
+      const today = new Date();
+      const proximas = EVENTS.filter(e => e.date >= today && e.status !== 'cancelada' && e.status !== 'completada');
+      const mesMes = EVENTS.filter(e => e.date.getMonth() === today.getMonth() && e.date.getFullYear() === today.getFullYear());
+      const sinConfirmar = EVENTS.filter(e => e.status === 'pendiente' && e.date >= today);
+      document.getElementById('stat-citas').textContent = proximas.length;
+      document.getElementById('stat-mes').textContent = mesMes.length;
+      document.getElementById('stat-sin').textContent = sinConfirmar.length;
+      const hoy = EVENTS.filter(e => sameDay(e.date, today));
+      if(hoy.length > 0){
+        document.getElementById('hoy-label').textContent = hoy.length + ' sesión' + (hoy.length > 1 ? 'es' : '');
+        document.getElementById('hoy-lista').innerHTML = hoy.map(e =>
+          '<div style="padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);"><span style="font-weight:500;color:var(--color-text-primary);">' + e.time + ' · ' + e.nombre + ' ' + e.apellido + '</span><br><span style="color:var(--color-text-secondary);">' + e.servicio + '</span></div>'
+        ).join('');
+      } else {
+        document.getElementById('hoy-label').textContent = 'Sin sesiones hoy';
+        document.getElementById('hoy-lista').textContent = '—';
+      }
+      if(proximas.length > 0){
+        const p = proximas[0];
+        const dias = Math.round((p.date - today) / (1000 * 60 * 60 * 24));
+        document.getElementById('proxima-label').textContent = dias === 0 ? 'Hoy' : dias === 1 ? 'Mañana' : 'En ' + dias + ' días';
+        document.getElementById('proxima-detalle').innerHTML =
+          '<span style="font-weight:500;color:var(--color-text-primary);">' + p.nombre + ' ' + p.apellido + '</span><br>' + p.time + ' · ' + p.servicio + '<br><span style="color:var(--color-text-secondary);">' + (p.phone || p.email) + '</span>';
+      }
+      const upd = new Date(data.updated);
+      document.getElementById('updated-label').textContent = 'Actualizado ' + upd.toLocaleDateString('es-ES', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+      document.getElementById('footer-updated').textContent = 'Datos sincronizados desde Google Calendar · ' + upd.toLocaleString('es-ES');
+      renderCalendar();
+      done();
+    }).catch(() => done());
+  fetch('content.json?t=' + t)
+    .then(r => r.ok ? r.json() : null).then(data => {
+      if(data){ CONTENT_DATA = data; const b = (data.piezas||[]).filter(p=>p.status==='Borrador').length; document.getElementById('contenido-label').textContent = b+' borrador'+(b!==1?'es':'')+' · semana '+(data.semana||'—'); }
+      done();
+    }).catch(() => done());
+  fetch('projects.json?t=' + t)
+    .then(r => r.ok ? r.json() : null).then(data => {
+      if(data){ PROJECTS_DATA = data; const total=(data.proyectos||[]).length; const u=(data.resumen||{}).urgente||0; document.getElementById('proyectos-label').textContent = total+' proyecto'+(total!==1?'s':'')+(u>0?' · '+u+' urgente'+(u!==1?'s':''):''); }
+      done();
+    }).catch(() => done());
+  fetch('report.json?t=' + t)
+    .then(r => r.ok ? r.json() : null).then(data => {
+      if(data){ REPORT_DATA = data; const cobrado=(data.ingresos||{}).cobrado||0; document.getElementById('informe-label').textContent = 'Semana '+(data.semana||'—')+' · '+cobrado+'€ cobrado'; }
+      done();
+    }).catch(() => done());
 }
 
 function toggleDark(){
