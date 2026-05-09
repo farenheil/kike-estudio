@@ -1,0 +1,50 @@
+name: Notify PM via Telegram
+on:
+  push:
+    paths:
+      - 'projects.json'
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, urllib.request, os
+          with open('projects.json') as f:
+              d = json.load(f)
+          r = d.get('resumen', {})
+          urgente = r.get('urgente', 0)
+          semana = r.get('esta_semana', 0)
+          progreso = r.get('en_progreso', 0)
+          cobrar = r.get('por_cobrar', 0)
+          lines = ["PM Estudio"]
+          lines.append(f"Urgente: {urgente}  Esta semana: {semana}  En progreso: {progreso}  Por cobrar: {cobrar}")
+          proyectos = d.get('proyectos', [])
+          urgentes = [p for p in proyectos if p.get('status') == 'urgente']
+          if urgentes:
+              lines.append("URGENTES:")
+              for p in urgentes:
+                  lines.append(f"  {p.get('nombre', p.get('cliente','?'))} | {p.get('servicio','?')} | deadline: {p.get('deadline','?')}")
+          cobrar_list = [p for p in proyectos if p.get('status') == 'por_cobrar']
+          if cobrar_list:
+              lines.append("POR COBRAR:")
+              for p in cobrar_list:
+                  imp = p.get('importe', 0)
+                  txt = f"  {p.get('nombre', p.get('cliente','?'))}"
+                  if imp: txt += f" | {imp}EUR"
+                  lines.append(txt)
+          lines.append("farenheil.github.io/kike-estudio")
+          msg = "\n".join(lines)
+          tok = os.environ['TELEGRAM_BOT_TOKEN']
+          cid = os.environ['TELEGRAM_CHAT_ID']
+          data = json.dumps({"chat_id": cid, "text": msg}).encode()
+          req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
+              data=data, headers={"Content-Type": "application/json"})
+          resp = urllib.request.urlopen(req, timeout=15)
+          print("Telegram OK:", resp.status)
+          PYEOF
