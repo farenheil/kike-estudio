@@ -1,1 +1,30 @@
-{"updated":null,"semana":null,"piezas":[]}
+{
+  "updated": "2026-05-09T10:12:49.672541",
+  "semana": "04/05 al 10/05",
+  "piezas": [
+    {
+      "tipo": "Educativo",
+      "titulo": "El error en el paso Retocar que hace sonar tu voz de plastico",
+      "caption": "Mira, esto lo hago siempre antes de mezclar una voz: limpiar con EQ antes de comprimir.\n\nEn el paso Retocar del Metodo Arcoiris, el error mas comun es comprimir una voz que todavia tiene frecuencias sucias. El compresor no arregla nada, lo magnifica todo. Si hay barro en los graves (80-200 Hz) o resonancias nasales (1-3 kHz), el compresor te los va a clavar en la mezcla para siempre.\n\nPrimero EQ quirurgico: corta lo que sobra. Despues comprime. Asi la voz respira, tiene cuerpo y no suena de plastico.\n\nSi tienes dudas sobre como trabajas tu voz, escribeme por DM. Tambien tengo una guia gratuita donde explico el proceso completo.",
+      "hashtags": "#MetodoArcoiris #MezclaVocal #ProduccionMusical #EstudioValencia #TipsDeProductor #MusicaUrbana #RnB #Trap",
+      "publicar": "miercoles",
+      "status": "Borrador"
+    },
+    {
+      "tipo": "Inspiracional",
+      "titulo": "Tu sonido propio vale mas que mil canciones copiadas",
+      "caption": "Hay un momento en el que dejas de esperar a estar listo y simplemente grabas.\n\nNo porque seas el mejor. Sino porque ya no soportas callar lo que tienes dentro.\n\nEl primer tema real no sale perfecto. Sale honesto. Y eso vale mas que mil canciones copiadas de lo que esta de moda.\n\nTu sonido propio no es una tecnica. Es todo lo que has vivido. Nadie mas lo tiene. Nadie mas lo puede hacer.\n\nNo imites. Empieza.",
+      "hashtags": "#ArtistaUrbano #SonidoPropio #MusicaHonesta #ProduccionUrbana #RnBEspanol #TrapEspanol #EstudioValencia #CrecimientoArtistico",
+      "publicar": "jueves",
+      "status": "Borrador"
+    },
+    {
+      "tipo": "Conexion",
+      "titulo": "El momento en que el artista se suelta de verdad en cabina",
+      "caption": "Hay un momento en cabina que no se puede forzar. Llega solo.\n\nEl artista lleva dos tomas calentandose, todavia con la guardia arriba. Y de repente... se suelta. La voz cambia, la energia cambia, la sala entera lo nota.\n\nEso es lo que buscamos aqui. No la toma perfecta. La toma real.\n\nSi quieres saber como suena tu voz cuando te sueltas de verdad, escribeme. Primera asesoria gratuita, sin compromiso. Hablamos.",
+      "hashtags": "#SesionDeEstudio #EstudioValencia #GrabacionVocal #ProduccionUrbana #VibraDeEstudio #ArtistaUrbano #MusicaDesdeAdentro #ConexionCreativa",
+      "publicar": "viernes",
+      "status": "Borrador"
+    }
+  ]
+}
