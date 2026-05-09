@@ -1,31 +1,38 @@
 {
-  "updated": "2026-05-09T12:45:08.349788",
   "resumen": {
-    "urgente": 0,
-    "esta_semana": 0,
-    "en_progreso": 2,
-    "por_cobrar": 0
+    "por_cobrar": 1,
+    "esta_semana": 2,
+    "en_progreso": 3,
+    "urgente": 1
   },
   "proyectos": [
     {
-      "titulo": "Me hubiera quedado",
-      "cliente": "Eddri & Rojo",
-      "servicio": "Pack completo, Diseño de portada",
-      "estado": "Mezclando",
-      "deadline": null,
-      "importe": 50,
-      "pagado": "Listo",
-      "clasificacion": "en_progreso"
+      "nombre": "Mix Eddrick - Dark Summer",
+      "pagado": false,
+      "importe": 0,
+      "status": "urgente",
+      "deadline": "2026-05-10",
+      "cliente": "Eddrick",
+      "servicio": "Mezcla"
     },
     {
-      "titulo": "Grammy",
-      "cliente": "Rojo",
-      "servicio": "Pack completo, Diseño de portada",
-      "estado": "Mezclando",
-      "deadline": null,
-      "importe": 100,
-      "pagado": "Listo",
-      "clasificacion": "en_progreso"
+      "nombre": "Grabacion Lachy",
+      "pagado": false,
+      "importe": 80,
+      "status": "en_progreso",
+      "deadline": "",
+      "cliente": "Lachy",
+      "servicio": "Grabacion"
+    },
+    {
+      "nombre": "Master Yofer Vol2",
+      "pagado": false,
+      "importe": 60,
+      "status": "por_cobrar",
+      "deadline": "",
+      "cliente": "Yofer",
+      "servicio": "Master"
     }
-  ]
+  ],
+  "updated": "2026-05-09T15:09:51"
 }
