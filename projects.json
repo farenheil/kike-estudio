@@ -1,1 +1,43 @@
-{"updated":null,"resumen":{"urgente":0,"esta_semana":0,"en_progreso":0,"por_cobrar":0},"proyectos":[]}
+{
+  "updated": "2026-05-09T11:02:36.120992",
+  "resumen": {
+    "urgente": 0,
+    "esta_semana": 0,
+    "en_progreso": 2,
+    "por_cobrar": 2
+  },
+  "proyectos": [
+    {
+      "cliente": "Eddri & Rojo",
+      "servicio": "Pack completo, Diseño de portada",
+      "status": "en_progreso",
+      "deadline": null,
+      "importe": 50,
+      "pagado": true
+    },
+    {
+      "cliente": "Rojo",
+      "servicio": "Pack completo, Diseño de portada",
+      "status": "en_progreso",
+      "deadline": null,
+      "importe": 100,
+      "pagado": false
+    },
+    {
+      "cliente": "Ivonne",
+      "servicio": "Pack completo",
+      "status": "por_cobrar",
+      "deadline": null,
+      "importe": 100,
+      "pagado": false
+    },
+    {
+      "cliente": "Gabi",
+      "servicio": "Mezcla, Master, Grabación",
+      "status": "por_cobrar",
+      "deadline": null,
+      "importe": 90,
+      "pagado": false
+    }
+  ]
+}
