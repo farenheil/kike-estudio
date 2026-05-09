@@ -18,26 +18,39 @@ jobs:
           with open('projects.json') as f:
               d = json.load(f)
           r = d.get('resumen', {})
-          urgente = r.get('urgente', 0)
-          semana = r.get('esta_semana', 0)
-          progreso = r.get('en_progreso', 0)
-          cobrar = r.get('por_cobrar', 0)
-          lines = ["PM Estudio"]
-          lines.append(f"Urgente: {urgente}  Esta semana: {semana}  En progreso: {progreso}  Por cobrar: {cobrar}")
+          activos = r.get('activos', 0)
+          por_cobrar = r.get('por_cobrar', 0)
           proyectos = d.get('proyectos', [])
-          urgentes = [p for p in proyectos if p.get('status') == 'urgente']
-          if urgentes:
-              lines.append("URGENTES:")
-              for p in urgentes:
-                  lines.append(f"  {p.get('nombre', p.get('cliente','?'))} | {p.get('servicio','?')} | deadline: {p.get('deadline','?')}")
-          cobrar_list = [p for p in proyectos if p.get('status') == 'por_cobrar']
-          if cobrar_list:
+          lines = ["PM Estudio"]
+          lines.append(f"Activos: {activos}  Por cobrar: {por_cobrar}")
+          act = [p for p in proyectos if p.get('categoria') == 'activo']
+          if act:
+              lines.append("")
+              lines.append("EN PROGRESO:")
+              for p in act:
+                  nombre = p.get('cliente', '?')
+                  if p.get('proyecto') and p.get('proyecto') != nombre:
+                      nombre = nombre + " - " + p['proyecto']
+                  estado = p.get('estado', '')
+                  srv = p.get('servicio', '')
+                  deadline = p.get('deadline', '')
+                  info = srv
+                  if deadline: info += " | " + deadline
+                  lines.append(f"  {nombre} | {estado}")
+                  if info: lines.append(f"    {info}")
+          cob = [p for p in proyectos if p.get('categoria') == 'por_cobrar']
+          if cob:
+              lines.append("")
               lines.append("POR COBRAR:")
-              for p in cobrar_list:
-                  imp = p.get('importe', 0)
-                  txt = f"  {p.get('nombre', p.get('cliente','?'))}"
+              for p in cob:
+                  nombre = p.get('cliente', '?')
+                  if p.get('proyecto') and p.get('proyecto') != nombre:
+                      nombre = nombre + " - " + p['proyecto']
+                  imp = p.get('euros_faltante', 0)
+                  txt = f"  {nombre}"
                   if imp: txt += f" | {imp}EUR"
                   lines.append(txt)
+          lines.append("")
           lines.append("farenheil.github.io/kike-estudio")
           msg = "\n".join(lines)
           tok = os.environ['TELEGRAM_BOT_TOKEN']
