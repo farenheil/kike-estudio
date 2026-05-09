@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-09T12:15:20.003410",
+  "updated": "2026-05-09T12:22:14.674089",
   "resumen": {
     "urgente": 0,
     "esta_semana": 0,
@@ -8,22 +8,30 @@
   },
   "proyectos": [
     {
-      "nombre": "Grammy",
-      "cliente": "Rojo",
-      "servicio": "Pack completo, Diseño de portada",
-      "status": "en_progreso",
+      "titulo": "Me hubiera quedado",
+      "cliente": "Eddri & Rojo",
+      "servicio": [
+        "Pack completo",
+        "Diseño de portada"
+      ],
+      "estado": "Mezclando",
+      "pago": "Listo",
       "deadline": null,
-      "importe": 0,
-      "pagado": true
+      "importe_faltante": 0,
+      "clasificacion": "en_progreso"
     },
     {
-      "nombre": "Me hubiera quedado",
-      "cliente": "Eddri & Rojo",
-      "servicio": "Pack completo, Diseño de portada",
-      "status": "en_progreso",
+      "titulo": "Grammy",
+      "cliente": "Rojo",
+      "servicio": [
+        "Pack completo",
+        "Diseño de portada"
+      ],
+      "estado": "Mezclando",
+      "pago": "Listo",
       "deadline": null,
-      "importe": 0,
-      "pagado": true
+      "importe_faltante": 0,
+      "clasificacion": "en_progreso"
     }
   ]
 }
