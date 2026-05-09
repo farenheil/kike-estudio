@@ -319,9 +319,9 @@ fetch('projects.json?t=' + Date.now())
   .then(r => r.ok ? r.json() : null).then(data => {
     if (!data) return;
     PROJECTS_DATA = data;
-    const total = (data.proyectos || []).length;
-    const u = (data.resumen || {}).urgente || 0;
-    document.getElementById('proyectos-label').textContent = total + ' proyecto' + (total !== 1 ? 's' : '') + (u > 0 ? ' · ' + u + ' urgente' + (u !== 1 ? 's' : '') : '');
+    const act = (data.resumen || {}).activos || 0;
+    const pc = (data.resumen || {}).por_cobrar || 0;
+    document.getElementById('proyectos-label').textContent = act + ' activo' + (act !== 1 ? 's' : '') + (pc > 0 ? ' · ' + pc + ' por cobrar' : '');
   }).catch(() => {});
 
 fetch('report.json?t=' + Date.now())
@@ -485,32 +485,73 @@ function renderProyectos(){
   }
   const upd = PROJECTS_DATA.updated ? new Date(PROJECTS_DATA.updated) : null;
   document.getElementById('proyectos-fecha-label').textContent = upd ? 'Actualizado ' + upd.toLocaleDateString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
-  const SP = {
-    urgente:     {label:'Urgente',     bg:'#FCEBEB', color:'#791F1F', dot:'#dc2626'},
-    esta_semana: {label:'Esta semana', bg:'#FAEEDA', color:'#633806', dot:'#f59e0b'},
-    en_progreso: {label:'En progreso', bg:'#E6F1FB', color:'#0C447C', dot:'#185FA5'},
-    por_cobrar:  {label:'Por cobrar',  bg:'#EAF3DE', color:'#27500A', dot:'#16a34a'}
+  const ESTADO_DOT = {
+    'Sin empezar':'#9CA3AF','Beatmaking':'#7C3AED','Voces grabadas':'#3B82F6',
+    'Mezclando':'#0284C7','Mezcla ✅':'#059669','Masterizando':'#D97706','Entregado':'#16a34a'
+  };
+  const ESTADO_BADGE = {
+    'Sin empezar': {bg:'#F3F4F6',color:'#374151'},
+    'Beatmaking':  {bg:'#F3E8FF',color:'#6D28D9'},
+    'Voces grabadas':{bg:'#DBEAFE',color:'#1E40AF'},
+    'Mezclando':   {bg:'#E0F2FE',color:'#0C4A6E'},
+    'Mezcla ✅':  {bg:'#D1FAE5',color:'#065F46'},
+    'Masterizando':{bg:'#FEF3C7',color:'#92400E'},
+    'Entregado':   {bg:'#EAF3DE',color:'#27500A'}
   };
   const r = PROJECTS_DATA.resumen || {};
-  lista.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-bottom:16px;">
-      ${[['urgente','Urgentes'],['esta_semana','Esta sem.'],['en_progreso','En progreso'],['por_cobrar','Por cobrar']].map(([k,lbl]) => {
-        const s = SP[k];
-        return '<div style="background:'+s.bg+';border-radius:var(--border-radius-md);padding:10px;text-align:center;"><p style="font-size:22px;font-weight:500;color:'+s.color+';margin:0;">'+(r[k]||0)+'</p><p style="font-size:11px;color:'+s.color+';margin:0;">'+lbl+'</p></div>';
-      }).join('')}
-    </div>`;
-  (PROJECTS_DATA.proyectos || []).forEach(p => {
-    const s = SP[p.status] || SP.en_progreso;
+  lista.innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">'+
+      '<div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px;text-align:center;">'+
+        '<p style="font-size:22px;font-weight:500;color:#0C447C;margin:0;">'+(r.activos||0)+'</p>'+
+        '<p style="font-size:11px;color:#0C447C;margin:0;">Activos</p></div>'+
+      '<div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;text-align:center;">'+
+        '<p style="font-size:22px;font-weight:500;color:#27500A;margin:0;">'+(r.por_cobrar||0)+'</p>'+
+        '<p style="font-size:11px;color:#27500A;margin:0;">Por cobrar</p></div>'+
+    '</div>';
+  const proyectos = PROJECTS_DATA.proyectos || [];
+  const activos = proyectos.filter(p => p.categoria === 'activo');
+  const cobrar  = proyectos.filter(p => p.categoria === 'por_cobrar');
+  if(activos.length){
+    const h = document.createElement('p');
+    h.style.cssText = 'font-size:11px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.6px;margin:0 0 8px;';
+    h.textContent = 'En progreso';
+    lista.appendChild(h);
+  }
+  activos.forEach(p => {
+    const dot = ESTADO_DOT[p.estado] || '#9CA3AF';
+    const badge = ESTADO_BADGE[p.estado] || {bg:'#F3F4F6',color:'#374151'};
+    const nombre = (p.proyecto && p.proyecto !== p.cliente) ? p.cliente + ' — ' + p.proyecto : p.cliente;
     const div = document.createElement('div');
     div.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:8px;';
     div.innerHTML =
-      '<div style="width:10px;height:10px;border-radius:50%;background:'+s.dot+';flex-shrink:0;"></div>'+
-      '<div style="flex:1;min-width:0;"><p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">'+(p.nombre||p.cliente)+'</p>'+
-      '<p style="font-size:12px;color:var(--color-text-secondary);margin:0;">'+p.cliente+' · '+p.servicio+(p.deadline?' · '+p.deadline:'')+'</p></div>'+
-      (p.importe&&!p.pagado?'<span style="font-size:13px;font-weight:500;color:#27500A;">'+p.importe+'€</span>':'');
+      '<div style="width:10px;height:10px;border-radius:50%;background:'+dot+';flex-shrink:0;"></div>'+
+      '<div style="flex:1;min-width:0;">'+
+        '<p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">'+nombre+'</p>'+
+        '<p style="font-size:12px;color:var(--color-text-secondary);margin:0;">'+p.servicio+(p.deadline?' · '+p.deadline:'')+'</p>'+
+      '</div>'+
+      '<span style="font-size:11px;padding:2px 8px;border-radius:99px;white-space:nowrap;background:'+badge.bg+';color:'+badge.color+';">'+p.estado+'</span>';
     lista.appendChild(div);
   });
-  if(!(PROJECTS_DATA.proyectos||[]).length){
+  if(cobrar.length){
+    const h = document.createElement('p');
+    h.style.cssText = 'font-size:11px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.6px;margin:12px 0 8px;';
+    h.textContent = 'Por cobrar';
+    lista.appendChild(h);
+  }
+  cobrar.forEach(p => {
+    const nombre = (p.proyecto && p.proyecto !== p.cliente) ? p.cliente + ' — ' + p.proyecto : p.cliente;
+    const div = document.createElement('div');
+    div.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:8px;';
+    div.innerHTML =
+      '<div style="width:10px;height:10px;border-radius:50%;background:#16a34a;flex-shrink:0;"></div>'+
+      '<div style="flex:1;min-width:0;">'+
+        '<p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">'+nombre+'</p>'+
+        '<p style="font-size:12px;color:var(--color-text-secondary);margin:0;">'+p.servicio+'</p>'+
+      '</div>'+
+      (p.euros_faltante>0?'<span style="font-size:13px;font-weight:500;color:#27500A;">'+p.euros_faltante+'€</span>':'');
+    lista.appendChild(div);
+  });
+  if(!proyectos.length){
     const empty = document.createElement('p');
     empty.style.cssText = 'color:var(--color-text-secondary);font-size:14px;padding:0.5rem 0;';
     empty.textContent = 'Sin proyectos activos.';
@@ -620,7 +661,7 @@ function refreshAll(){
     }).catch(() => done());
   fetch('projects.json?t=' + t)
     .then(r => r.ok ? r.json() : null).then(data => {
-      if(data){ PROJECTS_DATA = data; const total=(data.proyectos||[]).length; const u=(data.resumen||{}).urgente||0; document.getElementById('proyectos-label').textContent = total+' proyecto'+(total!==1?'s':'')+(u>0?' · '+u+' urgente'+(u!==1?'s':''):''); }
+      if(data){ PROJECTS_DATA = data; const act=(data.resumen||{}).activos||0; const pc=(data.resumen||{}).por_cobrar||0; document.getElementById('proyectos-label').textContent = act+' activo'+(act!==1?'s':'')+(pc>0?' · '+pc+' por cobrar':''); }
       done();
     }).catch(() => done());
   fetch('report.json?t=' + t)
