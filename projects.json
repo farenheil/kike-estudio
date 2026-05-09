@@ -1,38 +1,29 @@
 {
+  "updated": "2026-05-09T13:26:19",
   "resumen": {
-    "por_cobrar": 1,
-    "esta_semana": 2,
-    "en_progreso": 3,
-    "urgente": 1
+    "activos": 2,
+    "por_cobrar": 0
   },
   "proyectos": [
     {
-      "nombre": "Mix Eddrick - Dark Summer",
-      "pagado": false,
-      "importe": 0,
-      "status": "urgente",
-      "deadline": "2026-05-10",
-      "cliente": "Eddrick",
-      "servicio": "Mezcla"
+      "cliente": "Rojo",
+      "proyecto": "Grammy",
+      "servicio": "Pack completo · Diseño de portada",
+      "estado": "Mezclando",
+      "pago": "Listo",
+      "euros_faltante": 0,
+      "deadline": "",
+      "categoria": "activo"
     },
     {
-      "nombre": "Grabacion Lachy",
-      "pagado": false,
-      "importe": 80,
-      "status": "en_progreso",
+      "cliente": "Eddri & Rojo",
+      "proyecto": "Me hubiera quedado",
+      "servicio": "Pack completo · Diseño de portada",
+      "estado": "Mezclando",
+      "pago": "Listo",
+      "euros_faltante": 0,
       "deadline": "",
-      "cliente": "Lachy",
-      "servicio": "Grabacion"
-    },
-    {
-      "nombre": "Master Yofer Vol2",
-      "pagado": false,
-      "importe": 60,
-      "status": "por_cobrar",
-      "deadline": "",
-      "cliente": "Yofer",
-      "servicio": "Master"
+      "categoria": "activo"
     }
-  ],
-  "updated": "2026-05-09T15:09:51"
+  ]
 }
