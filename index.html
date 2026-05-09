@@ -505,8 +505,8 @@ function renderProyectos(){
     div.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:8px;';
     div.innerHTML =
       '<div style="width:10px;height:10px;border-radius:50%;background:'+s.dot+';flex-shrink:0;"></div>'+
-      '<div style="flex:1;min-width:0;"><p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">'+p.cliente+'</p>'+
-      '<p style="font-size:12px;color:var(--color-text-secondary);margin:0;">'+p.servicio+(p.deadline?' · '+p.deadline:'')+'</p></div>'+
+      '<div style="flex:1;min-width:0;"><p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">'+(p.nombre||p.cliente)+'</p>'+
+      '<p style="font-size:12px;color:var(--color-text-secondary);margin:0;">'+p.cliente+' · '+p.servicio+(p.deadline?' · '+p.deadline:'')+'</p></div>'+
       (p.importe&&!p.pagado?'<span style="font-size:13px;font-weight:500;color:#27500A;">'+p.importe+'€</span>':'');
     lista.appendChild(div);
   });
