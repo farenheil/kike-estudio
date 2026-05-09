@@ -1,0 +1,40 @@
+name: Notify Content via Telegram
+on:
+  push:
+    paths:
+      - 'content.json'
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, urllib.request, os
+          with open('content.json') as f:
+              d = json.load(f)
+          semana = d.get('semana', '?')
+          piezas = d.get('piezas', [])
+          lines = [f"Contenido semana {semana} listo:"]
+          for p in piezas:
+              tipo = p.get('tipo', '?')
+              titulo = p.get('titulo', '')
+              if not titulo:
+                  caption = p.get('caption', '')
+                  titulo = caption[:60] + '...' if len(caption) > 60 else caption
+              publicar = p.get('publicar', '?')
+              lines.append(f"{tipo} ({publicar}): {titulo}")
+          lines.append("farenheil.github.io/kike-estudio")
+          msg = "\n".join(lines)
+          tok = os.environ['TELEGRAM_BOT_TOKEN']
+          cid = os.environ['TELEGRAM_CHAT_ID']
+          data = json.dumps({"chat_id": cid, "text": msg}).encode()
+          req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
+              data=data, headers={"Content-Type": "application/json"})
+          resp = urllib.request.urlopen(req, timeout=15)
+          print("Telegram OK:", resp.status)
+          PYEOF
