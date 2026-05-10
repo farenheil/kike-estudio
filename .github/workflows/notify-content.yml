@@ -19,22 +19,30 @@ jobs:
               d = json.load(f)
           semana = d.get('semana', '?')
           piezas = d.get('piezas', [])
-          lines = [f"Contenido semana {semana} listo:"]
+          ICONOS = {
+              'Educativo':     '📚',
+              'Inspiracional': '💫',
+              'Conexion':      '🎬',
+              'Conexión':      '🎬',
+          }
+          lines = [f"✍️ Contenido — semana {semana}\n"]
           for p in piezas:
-              tipo = p.get('tipo', '?')
-              titulo = p.get('titulo', '')
+              tipo     = p.get('tipo', '?')
+              titulo   = p.get('titulo', '')
               if not titulo:
-                  caption = p.get('caption', '')
-                  titulo = caption[:60] + '...' if len(caption) > 60 else caption
+                  cap = p.get('caption', '')
+                  titulo = (cap[:60] + '…') if len(cap) > 60 else cap
               publicar = p.get('publicar', '?')
-              lines.append(f"{tipo} ({publicar}): {titulo}")
-          lines.append("farenheil.github.io/kike-estudio")
+              icono    = ICONOS.get(tipo, '📝')
+              lines.append(f"{icono} {tipo}  ({publicar})")
+              lines.append(f"   {titulo}\n")
+          lines.append("🔗 farenheil.github.io/kike-estudio")
           msg = "\n".join(lines)
           tok = os.environ['TELEGRAM_BOT_TOKEN']
           cid = os.environ['TELEGRAM_CHAT_ID']
           data = json.dumps({"chat_id": cid, "text": msg}).encode()
           req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
               data=data, headers={"Content-Type": "application/json"})
-          resp = urllib.request.urlopen(req, timeout=15)
-          print("Telegram OK:", resp.status)
+          urllib.request.urlopen(req, timeout=15)
+          print("Telegram OK")
           PYEOF
