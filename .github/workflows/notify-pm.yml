@@ -17,47 +17,59 @@ jobs:
           import json, urllib.request, os
           with open('projects.json') as f:
               d = json.load(f)
-          r = d.get('resumen', {})
-          activos = r.get('activos', 0)
-          por_cobrar = r.get('por_cobrar', 0)
+          r         = d.get('resumen', {})
           proyectos = d.get('proyectos', [])
-          lines = ["PM Estudio"]
-          lines.append(f"Activos: {activos}  Por cobrar: {por_cobrar}")
-          act = [p for p in proyectos if p.get('categoria') == 'activo']
-          if act:
-              lines.append("")
-              lines.append("EN PROGRESO:")
-              for p in act:
-                  nombre = p.get('cliente', '?')
-                  if p.get('proyecto') and p.get('proyecto') != nombre:
-                      nombre = nombre + " - " + p['proyecto']
-                  estado = p.get('estado', '')
-                  srv = p.get('servicio', '')
+          act  = [p for p in proyectos if p.get('categoria') == 'activo']
+          cob  = [p for p in proyectos if p.get('categoria') == 'por_cobrar']
+          urg  = [p for p in act if str(p.get('urgencia', '')).lower() in ('urgente', 'si', 'true', '1')]
+          lines = ["🎛️ PM Estudio\n"]
+          # resumen rapido
+          total_act = r.get('activos', len(act))
+          total_cob = r.get('por_cobrar', len(cob))
+          lines.append(f"📌 {total_act} en progreso  💰 {total_cob} por cobrar\n")
+          # urgentes
+          if urg:
+              lines.append(f"🔴 Urgente ({len(urg)}):")
+              for p in urg:
+                  cliente  = p.get('cliente', '?')
+                  proyecto = p.get('proyecto', '')
+                  label    = f"{cliente} — {proyecto}" if proyecto and proyecto != cliente else cliente
                   deadline = p.get('deadline', '')
-                  info = srv
-                  if deadline: info += " | " + deadline
-                  lines.append(f"  {nombre} | {estado}")
-                  if info: lines.append(f"    {info}")
-          cob = [p for p in proyectos if p.get('categoria') == 'por_cobrar']
-          if cob:
+                  lines.append(f"  • {label}" + (f"  📅 {deadline}" if deadline else ""))
               lines.append("")
-              lines.append("POR COBRAR:")
+          # en progreso (no urgentes)
+          norm = [p for p in act if p not in urg]
+          if norm:
+              lines.append(f"🟢 En progreso ({len(norm)}):")
+              for p in norm:
+                  cliente  = p.get('cliente', '?')
+                  proyecto = p.get('proyecto', '')
+                  label    = f"{cliente} — {proyecto}" if proyecto and proyecto != cliente else cliente
+                  estado   = p.get('estado', '')
+                  servicio = p.get('servicio', '')
+                  detail   = "  ".join(filter(None, [estado, servicio]))
+                  lines.append(f"  • {label}")
+                  if detail: lines.append(f"    {detail}")
+              lines.append("")
+          # por cobrar
+          if cob:
+              lines.append(f"💰 Por cobrar ({len(cob)}):")
               for p in cob:
-                  nombre = p.get('cliente', '?')
-                  if p.get('proyecto') and p.get('proyecto') != nombre:
-                      nombre = nombre + " - " + p['proyecto']
-                  imp = p.get('euros_faltante', 0)
-                  txt = f"  {nombre}"
-                  if imp: txt += f" | {imp}EUR"
-                  lines.append(txt)
-          lines.append("")
-          lines.append("farenheil.github.io/kike-estudio")
+                  cliente  = p.get('cliente', '?')
+                  proyecto = p.get('proyecto', '')
+                  label    = f"{cliente} — {proyecto}" if proyecto and proyecto != cliente else cliente
+                  imp      = p.get('euros_faltante', 0)
+                  lines.append(f"  • {label}" + (f"  → {imp}€" if imp else ""))
+              lines.append("")
+          if not act and not cob:
+              lines.append("✅ Sin proyectos activos. Semana libre.\n")
+          lines.append("🔗 farenheil.github.io/kike-estudio")
           msg = "\n".join(lines)
           tok = os.environ['TELEGRAM_BOT_TOKEN']
           cid = os.environ['TELEGRAM_CHAT_ID']
           data = json.dumps({"chat_id": cid, "text": msg}).encode()
           req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
               data=data, headers={"Content-Type": "application/json"})
-          resp = urllib.request.urlopen(req, timeout=15)
-          print("Telegram OK:", resp.status)
+          urllib.request.urlopen(req, timeout=15)
+          print("Telegram OK")
           PYEOF
