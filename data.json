@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-09T20:04:20+02:00",
+  "updated": "2026-05-10T07:09:09+02:00",
   "stats": {
-    "citasProximas": 2,
+    "citasProximas": 1,
     "sinConfirmar": 0
   },
   "events": [
@@ -25,9 +25,9 @@
       "email": "eddrickjc@gmail.com",
       "genero": "—",
       "referencias": "—",
-      "servicio": "Sesión de grabación",
+      "servicio": "Servicio",
       "time": "11:00",
-      "status": "confirmada"
+      "status": "completada"
     },
     {
       "date": "2026-05-13",
