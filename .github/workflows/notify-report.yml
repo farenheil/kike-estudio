@@ -17,34 +17,41 @@ jobs:
           import json, urllib.request, os
           with open('report.json') as f:
               d = json.load(f)
-          semana = d.get('semana', '?')
-          ingresos = d.get('ingresos', {})
-          cobrado = ingresos.get('cobrado', 0)
+          semana    = d.get('semana', '?')
+          ingresos  = d.get('ingresos', {})
+          cobrado   = ingresos.get('cobrado', 0)
           pendiente = ingresos.get('pendiente', 0)
-          proy = d.get('proyectos', {})
-          sesiones = proy.get('sesiones', 0)
-          entregados = proy.get('entregados', 0)
-          beats = d.get('beats', {})
-          beats_nuevos = beats.get('nuevos', 0)
-          contenido = d.get('contenido', {})
-          posts = contenido.get('publicados', 0)
-          planificados = contenido.get('planificados', 0)
-          rec = d.get('recomendacion', '')
+          proy      = d.get('proyectos', {})
+          sesiones  = proy.get('sesiones', 0)
+          entregados= proy.get('entregados', 0)
+          en_prog   = proy.get('en_progreso', 0)
+          beats     = d.get('beats', {})
+          b_nuevos  = beats.get('nuevos', 0)
+          b_total   = beats.get('total', 0)
+          cont      = d.get('contenido', {})
+          posts     = cont.get('publicados', 0)
+          planif    = cont.get('planificados', 0)
+          rec       = d.get('recomendacion', '')
           lines = [
-              f"Informe {semana}",
-              f"Cobrado: {cobrado}EUR  Pendiente: {pendiente}EUR",
-              f"Sesiones: {sesiones}  Entregados: {entregados}",
-              f"Beats nuevos: {beats_nuevos}  Posts: {posts}/{planificados}",
+              f"📊 Informe semanal",
+              f"📅 {semana}\n",
+              f"💰 Ingresos",
+              f"   Cobrado: {cobrado}€",
+              f"   Pendiente: {pendiente}€\n",
+              f"🎛️ Proyectos",
+              f"   Sesiones: {sesiones}  Entregados: {entregados}  En progreso: {en_prog}\n",
+              f"🎵 Beats  Nuevos: {b_nuevos}  Catalogo: {b_total}",
+              f"📱 Contenido  Posts: {posts}/{planif}\n",
           ]
           if rec:
-              lines.append(f">>> {rec}")
-          lines.append("farenheil.github.io/kike-estudio")
+              lines.append(f"💡 {rec}\n")
+          lines.append("🔗 farenheil.github.io/kike-estudio")
           msg = "\n".join(lines)
           tok = os.environ['TELEGRAM_BOT_TOKEN']
           cid = os.environ['TELEGRAM_CHAT_ID']
           data = json.dumps({"chat_id": cid, "text": msg}).encode()
           req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
               data=data, headers={"Content-Type": "application/json"})
-          resp = urllib.request.urlopen(req, timeout=15)
-          print("Telegram OK:", resp.status)
+          urllib.request.urlopen(req, timeout=15)
+          print("Telegram OK")
           PYEOF
