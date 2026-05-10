@@ -24,12 +24,18 @@ jobs:
           tok = os.environ['TELEGRAM_BOT_TOKEN']
           cid = os.environ['TELEGRAM_CHAT_ID']
           for b in bookings:
-              nombre = b.get('nombre', '?')
-              fecha = b.get('fecha', '?')
-              hora = b.get('hora', '?')
+              nombre   = b.get('nombre', '?')
+              fecha    = b.get('fecha', '?')
+              hora     = b.get('hora', '?')
               servicio = b.get('servicio', 'Sesion')
               telefono = b.get('telefono', '-')
-              msg = f"Nueva reserva: {nombre} | {servicio} | {fecha} a las {hora} | Tel: {telefono}"
+              msg = (
+                  f"🎙️ Nueva reserva\n\n"
+                  f"👤 {nombre}\n"
+                  f"🎵 {servicio}\n"
+                  f"📅 {fecha}  ⏰ {hora}h\n"
+                  f"📞 {telefono}"
+              )
               data = json.dumps({"chat_id": cid, "text": msg}).encode()
               req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
                   data=data, headers={"Content-Type": "application/json"})
