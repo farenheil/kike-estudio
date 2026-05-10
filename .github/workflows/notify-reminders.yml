@@ -19,27 +19,27 @@ jobs:
               d = json.load(f)
           sesiones = d.get('sesiones', [])
           fecha = d.get('fecha_display', '?')
+          if not sesiones:
+              print("Sin sesiones, skipping Telegram.")
+              exit(0)
           tok = os.environ['TELEGRAM_BOT_TOKEN']
           cid = os.environ['TELEGRAM_CHAT_ID']
-          if not sesiones:
-              msg = f"Manana ({fecha}) sin sesiones. Dia libre."
-              data = json.dumps({"chat_id": cid, "text": msg}).encode()
-              req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
-                  data=data, headers={"Content-Type": "application/json"})
-              urllib.request.urlopen(req, timeout=15)
-              print("Telegram OK: sin sesiones")
-              exit(0)
-          lines = [f"Sesiones manana {fecha}:"]
+          n = len(sesiones)
+          lines = [f"⏰ Manana — {fecha}  ({n} {'sesion' if n == 1 else 'sesiones'})\n"]
           for s in sesiones:
-              nombre = s.get('nombre', '?')
-              hora = s.get('hora', '?')
+              nombre   = s.get('nombre', '?')
+              hora     = s.get('hora', '?')
               servicio = s.get('servicio', 'Sesion')
-              tel = s.get('telefono', '-')
-              lines.append(f"  {nombre} a las {hora} | {servicio} | Tel: {tel}")
-          msg = "\n".join(lines)
+              tel      = s.get('telefono', '-')
+              lines.append(f"🎤 {nombre}")
+              lines.append(f"   📋 {servicio}  ⏰ {hora}h")
+              if tel and tel != '-':
+                  lines.append(f"   📞 {tel}")
+              lines.append("")
+          msg = "\n".join(lines).rstrip()
           data = json.dumps({"chat_id": cid, "text": msg}).encode()
           req = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
               data=data, headers={"Content-Type": "application/json"})
           urllib.request.urlopen(req, timeout=15)
-          print(f"Telegram OK: {len(sesiones)} sesiones")
+          print(f"Telegram OK: {n} sesiones")
           PYEOF
