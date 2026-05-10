@@ -1,8 +1,8 @@
 {
-  "updated": "2026-05-10T07:09:09+02:00",
+  "updated": "2026-05-10T20:10:31+02:00",
   "stats": {
-    "citasProximas": 1,
-    "sinConfirmar": 0
+    "citasProximas": 3,
+    "sinConfirmar": 1
   },
   "events": [
     {
@@ -30,6 +30,18 @@
       "status": "completada"
     },
     {
+      "date": "2026-05-11",
+      "nombre": "Kike",
+      "apellido": "Gutiérrez",
+      "phone": "",
+      "email": "",
+      "genero": "Drill",
+      "referencias": "Pop Smoke",
+      "servicio": "Beat",
+      "time": "18:00",
+      "status": "pendiente"
+    },
+    {
       "date": "2026-05-13",
       "nombre": "Lachy",
       "apellido": "Rayd",
@@ -38,6 +50,18 @@
       "genero": "Boombap",
       "referencias": "Los aldeanos",
       "servicio": "Rap",
+      "time": "18:00",
+      "status": "confirmada"
+    },
+    {
+      "date": "2026-05-14",
+      "nombre": "Jose",
+      "apellido": "Moreno",
+      "phone": "641716493",
+      "email": "u5761542658@gmail.com",
+      "genero": "—",
+      "referencias": "—",
+      "servicio": "Ambas",
       "time": "18:00",
       "status": "confirmada"
     }
