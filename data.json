@@ -1,8 +1,8 @@
 {
-  "updated": "2026-05-10T20:10:31+02:00",
+  "updated": "2026-05-11T07:11:10+02:00",
   "stats": {
-    "citasProximas": 3,
-    "sinConfirmar": 1
+    "citasProximas": 2,
+    "sinConfirmar": 0
   },
   "events": [
     {
@@ -28,18 +28,6 @@
       "servicio": "Servicio",
       "time": "11:00",
       "status": "completada"
-    },
-    {
-      "date": "2026-05-11",
-      "nombre": "Kike",
-      "apellido": "Gutiérrez",
-      "phone": "",
-      "email": "",
-      "genero": "Drill",
-      "referencias": "Pop Smoke",
-      "servicio": "Beat",
-      "time": "18:00",
-      "status": "pendiente"
     },
     {
       "date": "2026-05-13",
