@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-13T07:18:25+02:00",
+  "updated": "2026-05-13T18:15:20+02:00",
   "stats": {
-    "citasProximas": 2,
+    "citasProximas": 0,
     "sinConfirmar": 0
   },
   "events": [
@@ -39,19 +39,7 @@
       "referencias": "Los aldeanos",
       "servicio": "Rap",
       "time": "18:00",
-      "status": "confirmada"
-    },
-    {
-      "date": "2026-05-14",
-      "nombre": "Jose",
-      "apellido": "Moreno",
-      "phone": "641716493",
-      "email": "u5761542658@gmail.com",
-      "genero": "—",
-      "referencias": "—",
-      "servicio": "Ambas",
-      "time": "18:00",
-      "status": "confirmada"
+      "status": "completada"
     }
   ]
 }
