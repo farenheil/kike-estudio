@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-14T07:07:43+02:00",
+  "updated": "2026-05-14T20:02:45+02:00",
   "stats": {
-    "citasProximas": 0,
+    "citasProximas": 2,
     "sinConfirmar": 0
   },
   "events": [
@@ -40,6 +40,30 @@
       "servicio": "Rap",
       "time": "18:00",
       "status": "completada"
+    },
+    {
+      "date": "2026-05-20",
+      "nombre": "Lachy",
+      "apellido": "Rayd",
+      "phone": "123456",
+      "email": "kikegutz1@gmail.com",
+      "genero": "—",
+      "referencias": "—",
+      "servicio": "Drill",
+      "time": "18:00",
+      "status": "confirmada"
+    },
+    {
+      "date": "2026-05-24",
+      "nombre": "Eddri",
+      "apellido": "Ci",
+      "phone": "1123456786",
+      "email": "kikegutz1@gmail.com",
+      "genero": "—",
+      "referencias": "—",
+      "servicio": "Organización",
+      "time": "11:00",
+      "status": "confirmada"
     }
   ]
 }
