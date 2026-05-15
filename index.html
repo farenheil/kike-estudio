@@ -392,7 +392,7 @@ function renderCalendar(){
         chip.className='chip';
         chip.style.background=s.bg;
         chip.style.color=s.color;
-        chip.textContent=ev.time+' '+ev.nombre;
+        chip.textContent=(ev.status==='completada'?'✓ ':'')+ev.time+' '+ev.nombre;
         chip.onclick=(e)=>{e.stopPropagation();openModal(viewYear,viewMonth,dayNum,[ev])};
         cell.appendChild(chip);
       });
@@ -420,7 +420,10 @@ function buildEventCard(ev){
   wrap.style.cssText='border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:10px;';
   wrap.innerHTML=`
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-      <div style="width:40px;height:40px;border-radius:50%;background:${s.bg};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:${s.color};flex-shrink:0;">${initials}</div>
+      <div style="position:relative;flex-shrink:0;">
+        <div style="width:40px;height:40px;border-radius:50%;background:${s.bg};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:${s.color};">${initials}</div>
+        ${ev.status==='completada'?`<div style="position:absolute;bottom:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:#27500A;border:2px solid var(--color-background-primary);display:flex;align-items:center;justify-content:center;"><i class="ti ti-check" style="font-size:9px;color:#fff;"></i></div>`:''}
+      </div>
       <div style="flex:1;min-width:0;">
         <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;">${ev.nombre} ${ev.apellido}</p>
         <span class="badge" style="background:${s.bg};color:${s.color};margin-top:3px;">${s.label}</span>
