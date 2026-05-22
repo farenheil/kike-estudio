@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-20T20:11:00+02:00",
+  "updated": "2026-05-22T20:09:07+02:00",
   "stats": {
-    "citasProximas": 2,
+    "citasProximas": 1,
     "sinConfirmar": 0
   },
   "events": [
@@ -51,7 +51,7 @@
       "referencias": "—",
       "servicio": "Drill",
       "time": "18:00",
-      "status": "confirmada"
+      "status": "completada"
     },
     {
       "date": "2026-05-24",
