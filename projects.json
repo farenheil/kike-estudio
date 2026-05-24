@@ -1,20 +1,10 @@
 {
-  "updated": "2026-05-17T18:12:44",
+  "updated": "2026-05-24T18:11:04",
   "resumen": {
-    "activos": 2,
+    "activos": 1,
     "por_cobrar": 0
   },
   "proyectos": [
-    {
-      "cliente": "Eddri & Rojo",
-      "proyecto": "Me hubiera quedado",
-      "servicio": "Pack completo · Diseño de portada",
-      "estado": "Mezcla ✅",
-      "pago": "Listo",
-      "euros_faltante": 0,
-      "deadline": "2026-05-10",
-      "categoria": "activo"
-    },
     {
       "cliente": "Rojo",
       "proyecto": "Grammy",
