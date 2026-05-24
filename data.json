@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-24T07:08:57+02:00",
+  "updated": "2026-05-24T20:08:35+02:00",
   "stats": {
-    "citasProximas": 1,
+    "citasProximas": 0,
     "sinConfirmar": 0
   },
   "events": [
@@ -63,7 +63,7 @@
       "referencias": "—",
       "servicio": "Organización",
       "time": "11:00",
-      "status": "confirmada"
+      "status": "completada"
     }
   ]
 }
