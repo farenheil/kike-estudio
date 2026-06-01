@@ -1,69 +1,8 @@
 {
-  "updated": "2026-05-31T20:08:37+02:00",
+  "updated": "2026-06-01T07:09:38+02:00",
   "stats": {
     "citasProximas": 0,
     "sinConfirmar": 0
   },
-  "events": [
-    {
-      "date": "2026-05-08",
-      "nombre": "Rojo",
-      "apellido": "",
-      "phone": "",
-      "email": "",
-      "genero": "—",
-      "referencias": "—",
-      "servicio": "Sesión - Rojo",
-      "time": "18:00",
-      "status": "completada"
-    },
-    {
-      "date": "2026-05-10",
-      "nombre": "eddrick",
-      "apellido": "Cedeño",
-      "phone": "670465574",
-      "email": "eddrickjc@gmail.com",
-      "genero": "—",
-      "referencias": "—",
-      "servicio": "Servicio",
-      "time": "11:00",
-      "status": "completada"
-    },
-    {
-      "date": "2026-05-13",
-      "nombre": "Lachy",
-      "apellido": "Rayd",
-      "phone": "640520765",
-      "email": "lazarojoelgarciaferndez@gmail.com",
-      "genero": "Boombap",
-      "referencias": "Los aldeanos",
-      "servicio": "Rap",
-      "time": "18:00",
-      "status": "completada"
-    },
-    {
-      "date": "2026-05-20",
-      "nombre": "Lachy",
-      "apellido": "Rayd",
-      "phone": "123456",
-      "email": "kikegutz1@gmail.com",
-      "genero": "—",
-      "referencias": "—",
-      "servicio": "Drill",
-      "time": "18:00",
-      "status": "completada"
-    },
-    {
-      "date": "2026-05-24",
-      "nombre": "Eddri",
-      "apellido": "Ci",
-      "phone": "1123456786",
-      "email": "kikegutz1@gmail.com",
-      "genero": "—",
-      "referencias": "—",
-      "servicio": "Organización",
-      "time": "11:00",
-      "status": "completada"
-    }
-  ]
+  "events": []
 }
