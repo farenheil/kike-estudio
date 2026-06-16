@@ -1,14 +1,14 @@
 {
-  "updated": "2026-06-16T07:04:14+02:00",
+  "updated": "2026-06-16T13:45:00+02:00",
   "stats": {
-    "citasProximas": 2,
+    "citasProximas": 4,
     "sinConfirmar": 0
   },
   "events": [
     {
       "date": "2026-06-16",
-      "nombre": "Lachy",
-      "apellido": "rayd La bestia",
+      "nombre": "Lachy rayd",
+      "apellido": "La bestia",
       "phone": "640520765",
       "email": "lazarojoelgarciaferndez@gmail.com",
       "genero": "Rap",
@@ -27,6 +27,30 @@
       "referencias": "—",
       "servicio": "Sesión de grabación",
       "time": "18:00",
+      "status": "confirmada"
+    },
+    {
+      "date": "2026-06-19",
+      "nombre": "El rojo",
+      "apellido": "De Sousa",
+      "phone": "627190991",
+      "email": "enmanueldesousa75@gmail.com",
+      "genero": "Rap",
+      "referencias": "—",
+      "servicio": "Sesión de grabación",
+      "time": "18:00",
+      "status": "confirmada"
+    },
+    {
+      "date": "2026-06-20",
+      "nombre": "El Rojo",
+      "apellido": "De Sousa",
+      "phone": "627190991",
+      "email": "enmanueldesousa75@gmail.com",
+      "genero": "Rap",
+      "referencias": "—",
+      "servicio": "Sesión de grabación",
+      "time": "11:00",
       "status": "confirmada"
     }
   ]
