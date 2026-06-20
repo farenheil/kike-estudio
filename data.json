@@ -1,7 +1,7 @@
 {
-  "updated": "2026-06-19T20:03:10+02:00",
+  "updated": "2026-06-20T07:03:24+02:00",
   "stats": {
-    "citasProximas": 2,
+    "citasProximas": 1,
     "sinConfirmar": 0
   },
   "events": [
@@ -39,7 +39,7 @@
       "referencias": "—",
       "servicio": "Sesión de grabación",
       "time": "18:00",
-      "status": "confirmada"
+      "status": "completada"
     },
     {
       "date": "2026-06-20",
